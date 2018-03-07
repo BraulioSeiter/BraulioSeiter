@@ -1,0 +1,105 @@
+<html>
+<head>
+  <script src='asyncReq.js'></script>
+  <script src='jquery-3.3.1.min.js'></script>
+  <style>
+    #rssBox{
+      float:left;
+      width: 250px;
+      min-height: 100%;
+      background: gray;
+    } 
+    #theDetails{
+      float:right;
+      width: calc(100% - 250px);
+      min-height: 100%;
+      background: lightgray;
+    }
+    .resultTable{
+      border: 1px solid black;
+      width:100%;
+    }
+    th,td{
+      border: 1px solid black;
+    }
+    .songButton{
+      width: 250px;
+      margin-bottom: 15px;
+    }
+  </style>
+  <script>
+  function getDataFromServer(){
+    //var url = "./eval?eq=34-4*45";
+    var url = "https://rss.itunes.apple.com/api/v1/us/apple-music/hot-tracks/all/10/explicit.json";
+    loadFile(url, function(resData){
+      $("#result").val(resData);
+    });
+  }
+
+  var currRSSData = null;
+  function changeRSSSrc()
+  {
+    var feedURL = prompt("Enter your RSS feed URL:");
+    var url = "./getFeedData?url=" + feedURL;
+    loadFile(url, function(resData){
+      currRSSData = JSON.parse(resData).feed.results;
+      //var markup = resData;
+      var markup = "";
+      for(var i = 0; i < currRSSData.length; i++){
+        var entry = currRSSData[i];
+        var thumb = entry.artworkUrl100;
+        var name = entry.name;
+        var artist = entry.artistName;
+        markup += "<button class='songButton' onclick='itemSelected(" + i + ")'><img src='" + thumb + "'><h1>" + name+ "</h1><h2>" + artist + "<h2></button>";
+      }
+      $("#theList").html(markup);
+    });
+  }
+
+  function itemSelected(n)
+  {
+    var data = currRSSData[n];
+
+    var markup = JSON.stringify(data);
+    var html = `
+      <table class="resultTable">
+        <tr>
+          <th>Artist Name</th>
+          <th>Release Date</th> 
+          <th>Song Title</th>
+          <th>Album Title</th>
+          <th>Genre</th>
+          <th>Copyright</th>
+          <th>Album URL</th>
+        </tr>
+        <tr>
+            <td>${data.artistName}</td>
+            <td>${data.releaseDate}</td>
+            <td>${data.name}</td>
+            <td>${data.collectionName}</td>
+            <td>${data.genres[0].name}</td>
+            <td>${data.copyright}</td>
+            <td><a href=${data.url} target="_blank">Album Link<a/></td>
+        </tr>
+      </table>
+    `;
+ 
+    $("#theDetails").html(html);
+  }
+
+  </script>
+
+</head>
+
+<body>
+  <div id='rssBox'>
+    <h1> RSS Reader </h1>
+    <button onclick='changeRSSSrc()'> Edit </button>
+    <div id='theList'></div>
+  </div>
+
+  <div id='theDetails'>
+  </div>
+
+</body>
+</html>
