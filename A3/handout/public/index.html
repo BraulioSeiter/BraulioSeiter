@@ -26,6 +26,7 @@
       width: 250px;
       margin-bottom: 15px;
     }
+
   </style>
   <script>
   function getDataFromServer(){
@@ -42,6 +43,30 @@
     var feedURL = prompt("Enter your RSS feed URL:");
     var url = "./getFeedData?url=" + feedURL;
     loadFile(url, function(resData){
+      currRSSData = JSON.parse(resData).feed.results;
+      //var markup = resData;
+      var markup = "";
+      for(var i = 0; i < currRSSData.length; i++){
+        var entry = currRSSData[i];
+        var thumb = entry.artworkUrl100;
+        var name = entry.name;
+        var artist = entry.artistName;
+        markup += "<button class='songButton' onclick='itemSelected(" + i + ")'><img src='" + thumb + "'><h1>" + name+ "</h1><h2>" + artist + "<h2></button>";
+      }
+      $("#theList").html(markup);
+    });
+  }
+  
+  document.addEventListener("DOMContentLoaded", function() {
+    var url = location.hash.replace("#","./getFeedData?url=")
+  
+    loadRSS(url)
+  });
+
+  function loadRSS(url){
+    console.log(url);
+    loadFile(url, function(resData){
+  
       currRSSData = JSON.parse(resData).feed.results;
       //var markup = resData;
       var markup = "";
