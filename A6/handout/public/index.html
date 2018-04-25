@@ -438,11 +438,18 @@ var currSelection;
   <button id='editButton' onclick='addImgSrc()'> Add</button>
   <div id='theImageList'></div>
 </div>
+<div class="hiddeninBig">
+  <button onclick='goBackToMain()' class='hiddeninBig'> Back </button>
+  <button onclick='goToInspector()' class='hiddeninBig'> Inspector </button>
+  <button onclick='removeInspector()' class='hiddeninBig'>Remove Inspector </button>
+</div>
 <div id='theDetails'>
-    <button onclick='goBackToMain()' class='hiddeninBig'> Back </button>
-    <button onclick='goToInspector()' class='hiddeninBig'> Inspector </button>
-    <button onclick='removeInspector()' class='hiddeninBig'>Remove Inspector </button>
-  </div>
+    <div class="hiddeninSmall">
+      <button onclick='goBackToMain()' class='hiddeninBig'> Back </button>
+      <button onclick='goToInspector()' class='hiddeninBig'> Inspector </button>
+      <button onclick='removeInspector()' class='hiddeninBig'>Remove Inspector </button>
+    </div>
+</div>
 <div id='theInspector'>
   <br>
   <label for='blur'> Blur </label>
